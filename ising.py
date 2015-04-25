@@ -1,11 +1,11 @@
 # Generate configurations of the Ising model using the Metropolis algorithm
-# assume toroidal boundary conditions
+# use toroidal boundary conditions
 
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
-from math import *
+from math import exp
 from random import randint
 from random import random
 from copy import deepcopy
@@ -64,25 +64,9 @@ def get_pic(data_ising):
             data_ising[i][j] = 0.5 * (data_ising[i][j] + 1)
     return data1
 
-def is_equal(dataa, datab):
-    L = len(dataa)
-    iseq = 1
-
-    for i in range(0, L):
-        for j in range(0, L):
-            if dataa[i][j] != datab[i][j]:
-                iseq = 0
-                break
-    return 1
-
-
 data_pic1 = get_pic(data1)
 
 # plot the output
 picdata = np.array(data_pic1)
-
 plt.imshow(picdata, cmap='binary', interpolation='nearest')
-
 plt.show()
-
-
