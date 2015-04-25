@@ -16,6 +16,9 @@ beta = 1 / 2.269
 # Length and width of lattice
 L = 100
 
+# number of iterations of the algorithm
+num_iters = 10**6
+
 # initial configuration (1 is spin up and -1 is spin down)
 state0 = [ [randint(0,1) * 2 - 1 for i in range(0, L)] for j in range(0, L)]
 
@@ -54,7 +57,7 @@ def metrop(state_init, num_steps, inv_temp):
     sys.stdout.write("Done\n")
     return state_ising    
 
-data1 = metrop(state0, 10**6, beta)
+data1 = metrop(state0, num_iters, beta)
 
 # convert the Ising data to 0's and 1's instead of -1's and +1's
 def get_pic(data_ising):
