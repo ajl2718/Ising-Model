@@ -10,17 +10,24 @@ from random import randint
 from random import random
 from copy import deepcopy
 
-# inverse temperature
-beta = 1 / 2.269
+# get the width of the lattice, number of iterations and temperature from the command line arguments
+args = sys.argv
 
-# Length and width of lattice
-L = 100
+# try reading off the inverse temperature, length of lattice and number of iterations, otherwise return their default values
+# inverse temperature 1 / 2.269 default
+try:
+    L = int(args[1])
+    num_iters = int(args[2])
+    beta = float(args[3])
 
-# number of iterations of the algorithm
-num_iters = 10**6
+except IndexError:
+    beta = 1 / 2.269
+    L = 100
+    num_iters = 10**6
 
 # initial configuration (1 is spin up and -1 is spin down)
-state0 = [ [randint(0,1) * 2 - 1 for i in range(0, L)] for j in range(0, L)]
+state0 = np.random.randint(0,2, (L,L))
+state0 = state0 * 2 - 1
 
 # calculate the energy of a cross (only need the four energies around each site for the algorithm to work)
 def get_energy(lat_state, inv_temp, px, py):
@@ -53,19 +60,14 @@ def metrop(state_init, num_steps, inv_temp):
         
         sys.stdout.write("\rRunning metropolis algorithm for " + str(L) + " by " + str(L) + " lattice with " + str(num_steps) + " iterations: " + str( int( float(i) / float(num_steps) * 100) ) + "%" )
         sys.stdout.flush()
-
-    sys.stdout.write("Done\n")
+    sys.stdout.write("\nDone!\n")
     return state_ising    
 
 data1 = metrop(state0, num_iters, beta)
 
-# convert the Ising data to 0's and 1's instead of -1's and +1's
+# using numpy arrays
 def get_pic(data_ising):
-    N = len(data_ising)
-    for i in range(0, N):
-        for j in range(0, N):
-            data_ising[i][j] = 0.5 * (data_ising[i][j] + 1)
-    return data1
+    return  0.5 * (data_ising + 1)
 
 data_pic1 = get_pic(data1)
 
